@@ -1,3 +1,23 @@
+/* 設計 token：配色、字型、間距集中在這裡，方便之後調整 */
+:root {
+  --color-paper: #f6efe3;
+  --color-card: #fffaf0;
+  --color-ink: #1f2d2a;
+  --color-ink-soft: #4a5a55;
+  --color-forest: #1f3d36;
+  --color-accent: #c2512f;
+  --color-accent-dark: #a8401f;
+  --color-sun: #f2b84b;
+  --color-line: #d9cdb8;
+
+  --font-body: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  --font-heading: "Songti TC", "Noto Serif TC", "PMingLiU", Georgia, serif;
+
+  --radius-card: 4px 24px 4px 24px;
+  --shadow-hard: 6px 6px 0 var(--color-forest);
+  --duration-fast: 150ms;
+}
+
 /* 讓寬度計算更容易理解 */
 * {
   box-sizing: border-box;
@@ -6,78 +26,197 @@
 /* 整個網頁的基本設定 */
 body {
   margin: 0;
-  color: #1f2d2a;
-  background-color: #f6efe3;
-  font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  /* 淡淡的點狀紋理，增加紙張質感 */
+  background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+  font-family: var(--font-body);
   line-height: 1.7;
 }
 
 /* 頁首與頁尾 */
 header,
 footer {
-  padding: 40px 24px;
-  color: #f6efe3;
-  text-align: center;
-  background-color: #1f3d36;
+  color: var(--color-paper);
+  background-color: var(--color-forest);
 }
 
-/* 導覽列 */
+header {
+  padding: 56px max(24px, calc((100% - 960px) / 2)) 32px;
+  border-bottom: 8px solid var(--color-accent);
+}
+
+footer {
+  padding: 24px max(24px, calc((100% - 960px) / 2));
+  font-size: 14px;
+}
+
+footer p {
+  margin: 0;
+}
+
+header h1 {
+  margin: 0 0 24px;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 1rem + 4vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+
+/* 導覽列：膠囊按鈕 */
 nav {
   display: flex;
-  justify-content: center;
-  gap: 32px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 nav a {
-  color: #f6efe3;
+  padding: 6px 18px;
+  color: var(--color-paper);
   text-decoration: none;
+  border: 2px solid var(--color-paper);
+  border-radius: 999px;
+  transition: background-color var(--duration-fast), color var(--duration-fast),
+    transform var(--duration-fast);
 }
 
 nav a:hover {
-  text-decoration: underline wavy #f2b84b;
+  color: var(--color-forest);
+  background-color: var(--color-sun);
+  border-color: var(--color-sun);
+  transform: translateY(-2px);
 }
 
-/* 主要內容 */
+a:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 3px;
+}
+
+/* 主要內容：桌面版雙欄 */
 main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
   width: 92%;
-  max-width: 820px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 48px 0;
 }
 
 /* 內容區段 */
 section,
 main > div {
-  margin-bottom: 36px;
   padding: 28px;
-  background-color: #fffaf0;
-  border-radius: 4px 28px 4px 28px;
-  box-shadow: 6px 6px 0 #1f3d36;
+  background-color: var(--color-card);
+  border: 2px solid var(--color-forest);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-hard);
+}
+
+/* 自我介紹與課程表格橫跨兩欄 */
+section:first-of-type,
+section:last-of-type,
+main > div {
+  grid-column: 1 / -1;
+}
+
+/* 自我介紹：圖文並排 */
+section:first-of-type {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 32px;
+  align-items: start;
+}
+
+section:first-of-type h2 {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+/* 圖片在左欄，兩段文字都排在右欄 */
+section:first-of-type img {
+  grid-column: 1;
+  grid-row: 2 / span 2;
+}
+
+section:first-of-type p {
+  grid-column: 2;
+}
+
+/* 更多資訊：用強調色做出層次 */
+main > div {
+  color: var(--color-paper);
+  background-color: var(--color-accent-dark);
+}
+
+main > div h2,
+main > div a {
+  color: var(--color-paper);
+}
+
+main > div a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+main > div a:hover {
+  color: var(--color-sun);
 }
 
 /* 標題與文字 */
-h1 {
-  margin-top: 0;
-}
-
 h2 {
-  color: #a8401f;
+  display: inline-block;
+  margin: 0 0 16px;
+  padding-bottom: 4px;
+  color: var(--color-forest);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  border-bottom: 4px solid var(--color-sun);
 }
 
 p {
+  margin: 0 0 12px;
   line-height: 1.9;
+}
+
+strong {
+  color: var(--color-accent-dark);
+}
+
+em {
+  font-style: normal;
+  background: linear-gradient(transparent 60%, var(--color-sun) 60%);
+}
+
+a {
+  color: var(--color-accent-dark);
 }
 
 /* 圖片 */
 img {
   max-width: 100%;
   height: auto;
+  border: 4px solid var(--color-forest);
   border-radius: 50% 50% 8px 50%;
+  object-fit: cover;
 }
 
 /* 清單 */
+ul,
+ol {
+  margin: 0;
+  padding-left: 1.4em;
+}
+
 li {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+li::marker {
+  color: var(--color-accent);
+  font-weight: bold;
 }
 
 /* 表格 */
@@ -86,40 +225,78 @@ table {
   border-collapse: collapse;
 }
 
-th,
-td {
-  padding: 14px 16px;
-  border: 1px solid #d9cdb8;
+caption {
+  margin-bottom: 12px;
+  color: var(--color-ink-soft);
+  font-weight: bold;
   text-align: left;
 }
 
-th {
-  background-color: #f2b84b;
+th,
+td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-line);
 }
 
-/* 手機版面 */
+th {
+  color: var(--color-paper);
+  background-color: var(--color-forest);
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgba(242, 184, 75, 0.18);
+}
+
+tbody tr:hover {
+  background-color: rgba(194, 81, 47, 0.14);
+}
+
+/* 平板與手機版面 */
 @media (max-width: 720px) {
-  header,
-  footer {
-    padding: 24px;
+  header {
+    padding: 36px 20px 24px;
   }
 
   main {
-    width: 100%;
-    padding: 20px;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 32px 0;
   }
 
   section,
   main > div {
     padding: 20px;
+    box-shadow: 4px 4px 0 var(--color-forest);
   }
 
-  nav {
-    flex-direction: column;
-    gap: 10px;
+  section:first-of-type {
+    grid-template-columns: 1fr;
   }
 
-  table {
-    font-size: 13px;
+  section:first-of-type img {
+    grid-row: auto;
+    margin-bottom: 16px;
+  }
+
+  section:first-of-type p {
+    grid-column: 1;
+  }
+
+  th,
+  td {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+}
+
+/* 尊重使用者的減少動態偏好 */
+@media (prefers-reduced-motion: reduce) {
+  nav a {
+    transition: none;
+  }
+
+  nav a:hover {
+    transform: none;
   }
 }
